@@ -1,11 +1,11 @@
 {
-  "name": "chatstoryai-mcp",
-  "version": "1.0.0",
+  "name": "@tomisakae/chatstoryai-mcp",
+  "version": "0.0.1",
   "description": "MCP dành cho ChatStoryAI.",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "chatstoryai-mcp": "./build/index.js"
+    "chatstoryai-mcp": "build/index.js"
   },
   "scripts": {
     "start": "node index.js",
