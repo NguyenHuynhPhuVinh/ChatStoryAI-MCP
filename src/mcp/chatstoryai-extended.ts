@@ -258,11 +258,27 @@ export function registerChatStoryAIExtendedTools(server: McpServer) {
     },
     async ({ storyId, chapterId, characterId, content, orderNumber, type }) => {
       try {
+        // Nếu orderNumber không được cung cấp, tự động tính toán
+        let finalOrderNumber = orderNumber;
+        if (finalOrderNumber === undefined) {
+          try {
+            // Lấy danh sách dialogue hiện tại để tính order_number
+            const existingDialogues = await chatStoryAITools.getDialogues(
+              storyId,
+              chapterId
+            );
+            finalOrderNumber = existingDialogues.dialogues.length + 1;
+          } catch (error) {
+            // Nếu không lấy được danh sách, mặc định là 1
+            finalOrderNumber = 1;
+          }
+        }
+
         const dialogueData = {
           character_id: characterId,
           content,
-          order_number: orderNumber,
-          type,
+          order_number: finalOrderNumber,
+          type: type || "narration",
         };
         const data = await chatStoryAITools.createDialogue(
           storyId,
