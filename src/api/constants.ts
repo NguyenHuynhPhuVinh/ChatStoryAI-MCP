@@ -42,6 +42,9 @@ export const ENDPOINTS = {
   // Account
   ACCOUNT_BOOKMARKS: "/api/account/bookmarks",
   ACCOUNT_HISTORY: "/api/account/view-history",
+
+  // Categories and Tags
+  CATEGORIES: "/api/categories", // Trả về cả mainCategories và tags
 };
 
 // Cấu hình API

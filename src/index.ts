@@ -5,8 +5,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { APP_CONFIG } from "./config/config.js";
 
 // Import các module đăng ký công cụ
-import { registerBasicTools } from "./mcp/basic.js";
-import { registerExampleTools } from "./mcp/example.js";
+import { registerChatStoryAITools } from "./mcp/chatstoryai.js";
+import { registerChatStoryAIExtendedTools } from "./mcp/chatstoryai-extended.js";
 
 // Tạo server instance
 // Create server instance
@@ -18,9 +18,10 @@ const server = new McpServer({
     tools: {},
   },
 });
+
 // Đăng ký các công cụ
-registerBasicTools(server);
-registerExampleTools(server);
+registerChatStoryAITools(server);
+registerChatStoryAIExtendedTools(server);
 
 async function main() {
   const transport = new StdioServerTransport();

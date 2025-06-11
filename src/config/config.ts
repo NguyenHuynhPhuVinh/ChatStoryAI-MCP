@@ -1,6 +1,10 @@
 /**
  * Cấu hình ứng dụng
  */
+import dotenv from "dotenv";
+
+// Load biến môi trường từ file .env
+dotenv.config();
 
 /**
  * Cấu hình môi trường
@@ -14,6 +18,9 @@ export const ENV = {
 
   // Cờ gỡ lỗi
   DEBUG: process.env.DEBUG === "true",
+
+  // API Key cho ChatStoryAI
+  CHATSTORYAI_API_KEY: process.env.CHATSTORYAI_API_KEY || "",
 };
 
 /**
@@ -21,13 +28,13 @@ export const ENV = {
  */
 export const APP_CONFIG = {
   // Tên ứng dụng
-  NAME: "MCP Server",
+  NAME: "ChatStoryAI MCP Server",
 
   // Phiên bản
   VERSION: "1.0.0",
 
   // Thời gian chờ mặc định (ms)
-  DEFAULT_TIMEOUT: 5000,
+  DEFAULT_TIMEOUT: 10000,
 
   // Số lần thử lại tối đa
   MAX_RETRIES: 3,
