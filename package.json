@@ -1,6 +1,6 @@
 {
   "name": "@tomisakae/chatstoryai-mcp",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "MCP dành cho ChatStoryAI.",
   "main": "index.js",
   "type": "module",

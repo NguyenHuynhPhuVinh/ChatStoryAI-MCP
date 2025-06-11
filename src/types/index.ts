@@ -163,7 +163,7 @@ export interface Dialogue {
  * Kiểu dữ liệu cho tạo/cập nhật hội thoại
  */
 export interface DialogueRequest {
-  character_id?: number;
+  character_id?: number | null;
   content: string;
   order_number?: number;
   type?: DialogueType;

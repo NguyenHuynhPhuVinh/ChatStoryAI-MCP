@@ -214,12 +214,43 @@ export function registerChatStoryAIExtendedTools(server: McpServer) {
     },
     async ({ storyId, chapterId }) => {
       try {
-        const data = await chatStoryAITools.getDialogues(storyId, chapterId);
+        // Lấy danh sách hội thoại
+        const dialoguesData = await chatStoryAITools.getDialogues(
+          storyId,
+          chapterId
+        );
+
+        // Lấy danh sách nhân vật để join tên
+        const charactersData = await chatStoryAITools.getCharacters(storyId);
+
+        // Tạo map character_id -> character_name để join nhanh
+        const characterMap = new Map();
+        charactersData.characters.forEach((char) => {
+          characterMap.set(char.character_id, char.name);
+        });
+
+        // Join dữ liệu để thêm tên nhân vật
+        const dialoguesWithCharacterNames = dialoguesData.dialogues.map(
+          (dialogue) => ({
+            ...dialogue,
+            character_name: dialogue.character_id
+              ? characterMap.get(dialogue.character_id)
+              : null,
+          })
+        );
+
         return {
           content: [
             {
               type: "text",
-              text: JSON.stringify(data, null, 2),
+              text: JSON.stringify(
+                {
+                  ...dialoguesData,
+                  dialogues: dialoguesWithCharacterNames,
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -258,6 +289,15 @@ export function registerChatStoryAIExtendedTools(server: McpServer) {
     },
     async ({ storyId, chapterId, characterId, content, orderNumber, type }) => {
       try {
+        // Validation giống frontend
+        const finalType = type || "narration";
+
+        // Nếu type là narration thì character_id phải là null
+        // Nếu type là dialogue thì phải có character_id
+        if (finalType === "dialogue" && !characterId) {
+          throw new Error("Loại dialogue phải có character_id");
+        }
+
         // Nếu orderNumber không được cung cấp, tự động tính toán
         let finalOrderNumber = orderNumber;
         if (finalOrderNumber === undefined) {
@@ -275,11 +315,12 @@ export function registerChatStoryAIExtendedTools(server: McpServer) {
         }
 
         const dialogueData = {
-          character_id: characterId,
+          character_id: finalType === "narration" ? null : characterId,
           content,
           order_number: finalOrderNumber,
-          type: type || "narration",
+          type: finalType,
         };
+
         const data = await chatStoryAITools.createDialogue(
           storyId,
           chapterId,
